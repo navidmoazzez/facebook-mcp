@@ -1,61 +1,52 @@
 # Security
 
-This server can post publicly as your Facebook Page. This page says what
-protects you, and what does not.
-
 ## Reporting a vulnerability
 
-Use GitHub's private vulnerability reporting: open the
-[Security tab](https://github.com/navidmoazzez/facebook-mcp/security/advisories/new)
-and click **Report a vulnerability**. That keeps it private until a fix exists.
+[Report it privately](https://github.com/navidmoazzez/facebook-mcp/security/advisories/new).
+Please do not open a public issue for a security problem: an issue is visible to
+everyone the moment you file it, including whoever would use the bug.
 
-Please do not open a public issue for a security problem.
+Include what you did, what happened, and what you expected. A proof of concept
+helps.
 
-## What it can reach
+## What this server holds
 
-Only Pages you administer, and only through Meta's official Graph API. It
-cannot touch a personal profile, because Facebook removed that from the API in
-2018.
+**A Facebook access token.** A long-lived token is the account: anyone holding it
+can post and delete as you, within the scopes granted.
 
-## Three levels, three switches
+Almost everything here acts as a Page rather than as you, so what leaks is
+control of the Pages the token administers.
 
-**Reading** needs nothing. Insights, posts and comments work out of the box.
+Page tokens obtained through a long-lived user token do not expire, which is
+convenient and is also why a leaked one stays useful indefinitely. Revoke it in
+Meta's app settings rather than waiting it out.
 
-**Writing** needs `FACEBOOK_ALLOW_WRITE=true`. Posting, editing, replying and
-hiding all refuse without it, so a default install cannot publish.
+Nothing leaves your machine except calls to Meta. There is no backend and no
+telemetry.
 
-**Deleting** needs `FACEBOOK_ALLOW_DELETE=true` on top. Separate because it is
-the only action here with no undo.
+## Write safety
 
-## The injection risk
+Writes work by default, because posting is the point of the server.
 
-Comments are written by strangers. An agent that reads them and can also post
-is exposed: somebody puts instructions in a comment, your agent reads them
-while triaging, and acts on them.
+**`confirm: true`** on publishing and deleting, which are public the moment they
+run and cannot be undone from a chat window. Hiding a reply is not guarded,
+because it is one click to undo.
 
-What is done about it: comment text is labelled as data rather than
-instructions when handed to the model, writes are off by default, and deletes
-need a second switch. What is not done: nothing removes the risk entirely.
+**`FACEBOOK_READ_ONLY=1`** removes every write tool from the list. The tools are
+never registered, so a model cannot see or call them.
 
-Set `FACEBOOK_AUDIT_LOG=/path/to/file` and every attempted write is appended,
-with no tool able to read or edit it.
+## Untrusted content
 
-## Your tokens
+Comments and reviews are written by other people. Treat anything returned from a
+thread as data to report on, never as instructions. The risk is highest with
+writes enabled, because a reply is text a stranger chose aimed at an agent that
+can post.
 
-`~/.facebook-mcp/pages.json`, written mode 600 in a mode 700 directory.
+## Running it over HTTP
 
-Page tokens derived from a long-lived user token **do not expire**. Anyone who
-reads that file can post as your Page indefinitely. Treat it as a password.
+The HTTP transport has no authentication of its own and belongs behind TLS and an
+authenticating proxy. It holds a live credential for your account.
 
-Tokens travel as a query parameter, because Graph requires it. They are never
-written to the audit log, which records the action and never the URL.
+## Supported versions
 
-## What this cannot protect you from
-
-**A compromised machine is a compromised Page.** The tokens are on disk because
-they have to be.
-
-**Anything a tool returns enters your conversation** with the model, and goes
-wherever that model runs. True of every MCP server.
-
-**Not affiliated with Meta or Facebook.**
+The latest published version gets fixes.

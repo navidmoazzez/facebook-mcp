@@ -605,6 +605,10 @@ for spam. Deleting is possible but needs a separate switch.
 
 </details>
 
+## Questions
+
+Run into a problem or have a question? [Open an issue](https://github.com/navidmoazzez/facebook-mcp/issues) and I will help.
+
 ## About the author
 
 Navid Moazzez is a leading AI business strategist, and the host of the AI Creator Summit, watched by 100,000+ creators. He helps creators and founders master AI and build their own AI Operating System (AI OS) to automate their business and life. This Facebook MCP server is one piece of that system.
