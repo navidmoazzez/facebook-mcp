@@ -6,7 +6,7 @@ protects you, and what does not.
 ## Reporting a vulnerability
 
 Use GitHub's private vulnerability reporting: open the
-[Security tab](https://github.com/thenavidm/facebook-mcp/security/advisories/new)
+[Security tab](https://github.com/navidmoazzez/facebook-mcp/security/advisories/new)
 and click **Report a vulnerability**. That keeps it private until a fix exists.
 
 Please do not open a public issue for a security problem.

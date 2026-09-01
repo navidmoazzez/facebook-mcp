@@ -36,7 +36,7 @@ Environment:
   FACEBOOK_PREFERRED_PAGES      Comma separated names, deciding which Page acts by default.
   FACEBOOK_AUDIT_LOG=<path>     Append every write to this file.
 
-Docs: https://github.com/thenavidm/facebook-mcp
+Docs: https://github.com/navidmoazzez/facebook-mcp
 `;
 
 async function main(): Promise<void> {

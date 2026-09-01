@@ -12,7 +12,7 @@
     "facebook-api", "graph-api", "meta", "social-media", "scheduling",
     "claude", "claude-code", "ai-agents", "llm-tools", "anthropic"
   ],
-  "repository": { "type": "git", "url": "git+https://github.com/thenavidm/facebook-mcp.git" },
+  "repository": { "type": "git", "url": "git+https://github.com/navidmoazzez/facebook-mcp.git" },
   "homepage": "https://navid.me",
   "engines": { "node": ">=20" },
   "scripts": {

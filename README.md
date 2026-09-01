@@ -13,7 +13,7 @@ Give any AI agent real access to your Facebook Pages. Post, schedule, draft, rea
 
 Built on Meta's official Graph API, so nothing here is reverse engineered and nothing is going to break when Facebook ships an update.
 
-Built by [Navid Moazzez](https://navid.me).
+Built by [Navid Moazzez](https://navid.me?utm_source=github&utm_medium=readme&utm_campaign=facebook-mcp).
 
 ```
 You: how did last week's posts do, and schedule the follow-up for Tuesday 9am
@@ -352,7 +352,7 @@ Navid Moazzez is a leading AI business strategist, and the host of the AI Creato
 
 **Links**
 
-- Personal website: [navid.me](https://navid.me)
+- Personal website: [navid.me](https://navid.me?utm_source=github&utm_medium=readme&utm_campaign=facebook-mcp)
 - YouTube: [@thenavidm](https://youtube.com/@thenavidm?sub_confirmation=1) and [@thenavidai](https://youtube.com/@thenavidai?sub_confirmation=1)
 - X: [@thenavidm](https://x.com/thenavidm)
 - Instagram: [@thenavidm](https://instagram.com/thenavidm)
@@ -364,4 +364,4 @@ Navid Moazzez is a leading AI business strategist, and the host of the AI Creato
 
 ---
 
-© 2026 NM Media. Made with ❤️ by [Navid Moazzez](https://navid.me).
+© 2026 NM Media. Made with ❤️ by [Navid Moazzez](https://navid.me?utm_source=github&utm_medium=readme&utm_campaign=facebook-mcp).
