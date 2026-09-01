@@ -1,0 +1,35 @@
+{
+  "name": "@thenavidm/facebook-mcp",
+  "version": "0.1.0",
+  "description": "Facebook MCP server for Claude Code and AI agents. Post to your Pages, schedule and draft, read insights, and moderate comments through Meta's official Graph API.",
+  "bin": { "facebook-mcp": "dist/index.js" },
+  "files": ["dist", "README.md", "SKILL.md", "LICENSE"],
+  "type": "module",
+  "license": "MIT",
+  "author": "Navid Moazzez <https://navid.me>",
+  "keywords": [
+    "mcp", "mcp-server", "model-context-protocol", "facebook", "facebook-pages",
+    "facebook-api", "graph-api", "meta", "social-media", "scheduling",
+    "claude", "claude-code", "ai-agents", "llm-tools", "anthropic"
+  ],
+  "repository": { "type": "git", "url": "git+https://github.com/thenavidm/facebook-mcp.git" },
+  "homepage": "https://navid.me",
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "start": "node dist/index.js",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.18.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "typescript": "^5.7.0",
+    "vitest": "^2.1.0"
+  }
+}

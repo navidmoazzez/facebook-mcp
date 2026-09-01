@@ -1,0 +1,10 @@
+node_modules/
+dist/
+*.log
+
+# Stored Page tokens. These are credentials.
+.facebook-mcp/
+.env
+.env.local
+
+.DS_Store
