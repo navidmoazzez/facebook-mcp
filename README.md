@@ -51,16 +51,36 @@ Claude: Reading your Page insights.
 
 ## 1. What you can ask it 💬
 
-- Schedule this post for Tuesday at 9am.
-- How did last week's posts do compared to the week before?
-- Draft three versions of the announcement and save them, I will pick one.
-- Which post this month got the most engagement, and why do you think that is?
-- Read the comments on the latest post and tell me if anything needs a reply.
-- Hide the spam comments on that post.
-- What is my follower growth over the last month?
+- Schedule this for Tuesday at 9am, and draft two alternatives I can pick from.
+- Which post this month got the most reach, and what was different about it?
+- Compare last week to the week before. Did the change in posting time help?
+- Read the comments on the last five posts and tell me what people keep asking.
+- Draft a reply to each comment that deserves one, in my voice. Do not post them.
+- Hide the spam on that post, but leave the criticism.
+- How many followers did I gain this month, and which day did most of it happen?
 
-The point is the loop. Ask what worked, then act on the answer, without leaving
-the conversation.
+**What this adds over Meta Business Suite**, which already schedules posts:
+
+Business Suite shows you numbers. It cannot answer a question about them. "Why
+did Thursday do four times better" needs someone to look at the posts, compare
+them, and form a view. That is the part a conversation does and a dashboard
+does not.
+
+The second thing is that reading and acting happen in one place. You ask what
+worked, decide what to do about it, and schedule the follow-up without opening
+another tab or copying anything between windows.
+
+**What to do first**, in order:
+
+1. Install it, one command, section 2
+2. Create a Meta app and connect your Page, sections 3 and 4. This is the part
+   that takes ten minutes, and only once
+3. Point your client at it, section 5
+4. Ask it something read-only, like "how did my last five posts do"
+5. Turn on writing only once you trust what it is telling you
+
+Reading works as soon as a Page is connected. Posting stays off until you set
+one environment variable, deliberately.
 
 ---
 
