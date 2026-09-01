@@ -27,7 +27,7 @@ granted the moment you create the app.
    moderating comments. There is no separate "Pages API" option.
 
    Older guides say to pick "Other" and then an app type of "Business". Those
-   options no longer exist. Meta reorganised app creation around use cases, and
+   options no longer exist. Meta reorganized app creation around use cases, and
    most tutorials online still describe the old screen.
 
 ## 2. Add the permissions
