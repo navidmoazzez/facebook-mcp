@@ -20,9 +20,15 @@ granted the moment you create the app.
 
 1. Go to [developers.facebook.com/apps](https://developers.facebook.com/apps)
    and click **Create app**.
-2. For the use case, choose **Other**, then **Business** as the app type.
-   The Business type is the one that exposes the Pages permissions.
-3. Give it any name. It is never shown to anyone but you.
+2. Enter a name and contact email, then **Next**.
+3. On the **Use cases** screen, tick **Manage everything on your Page**.
+
+   That single use case covers publishing, reading posts and insights, and
+   moderating comments. There is no separate "Pages API" option.
+
+   Older guides say to pick "Other" and then an app type of "Business". Those
+   options no longer exist. Meta reorganised app creation around use cases, and
+   most tutorials online still describe the old screen.
 
 ## 2. Add the permissions
 

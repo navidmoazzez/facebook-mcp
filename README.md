@@ -107,18 +107,57 @@ are only for managing Pages belonging to other people, which Meta calls
 Advanced Access. For your own Pages, Standard Access is enough and it is
 granted the moment you ask.
 
+> [!TIP]
+> **One app covers Facebook, Instagram and Threads.**
+>
+> Use cases are ticked in a list, and you can tick several. If you plan to use
+> more than one of these, do it now rather than making three apps and managing
+> three sets of credentials.
+>
+> | Use case | For | Server |
+> |---|---|---|
+> | Manage everything on your Page | Facebook Pages | this one |
+> | Manage messaging and content on Instagram | Instagram | [instagram-mcp](https://github.com/navidmoazzez/instagram-mcp) |
+> | Access Threads API | Threads | [threads-mcp](https://github.com/navidmoazzez/threads-mcp) |
+>
+> Incompatible combinations grey out. If an option will not tick, it conflicts
+> with something already selected.
+
 ### Step 1: create the app
 
-1. [developers.facebook.com/apps](https://developers.facebook.com/apps), then
-   **Create app**
-2. Use case: **Other**. App type: **Business**. That type is the one that
-   exposes the Pages permissions
-3. Any name. Nobody else sees it
+1. Go to
+   [developers.facebook.com/apps/creation](https://developers.facebook.com/apps/creation/)
+   and log in.
+2. **App details.** Enter a name and a contact email, then **Next**. The name
+   is only shown to you at this stage.
+3. **Use cases.** Tick **Manage everything on your Page**, plus any others from
+   the table above. Then **Next**.
 
-### Step 2: add the permissions
+   That one use case covers publishing, reading posts and insights, and
+   moderating comments. There is no separate "Pages API" option, which is what
+   people look for and do not find.
 
-**App Review**, then **Permissions and Features**. Request Standard Access for
-each. It is granted immediately.
+> [!IMPORTANT]
+> **Older guides say to pick "Other" and then an app type of "Business". That
+> is the old screen.**
+>
+> Meta reorganised app creation around use cases: you pick what you want to do
+> and Meta adds the products for you. "Other" still exists for app types none
+> of the use cases cover, but it is not the route here, and taking it means
+> adding every product and permission by hand afterwards.
+
+### Step 2: connect a business portfolio
+
+Meta asks which business portfolio the app belongs to. Pick an existing one, or
+create one. It is free, it takes a moment, and it is only an ownership record.
+
+This step is easy to rush past and then hard to undo, because moving an app
+between portfolios later is awkward.
+
+### Step 3: add the permissions
+
+Open **App Review**, then **Permissions and Features**. Request **Standard
+Access** for each. It is granted immediately, with no review.
 
 | Permission | What it is for |
 |---|---|
@@ -132,7 +171,25 @@ The one people miss is `pages_read_engagement`. It reads like a write
 permission and is not. Leave it out and reading breaks while posting still
 works, which is a confusing way to fail.
 
----
+### Step 4: check the Page is linked
+
+Your Page must belong to the same business portfolio as the app, or the app
+will not see it and `login` will report no Pages.
+
+**Business settings**, then **Accounts**, then **Pages**. If the Page is not
+listed, add it there first.
+
+### Rather have an agent do it
+
+The steps above are written to be handed over. Paste this into Claude, or any
+agent with a browser:
+
+> Walk me through creating a Meta developer app for the Facebook Pages API.
+> I need the "Manage everything on your Page" use case, Standard Access for
+> pages_show_list, pages_read_engagement, pages_manage_posts,
+> pages_manage_engagement and read_insights, and my Page linked to the same
+> business portfolio. Tell me what to click, one step at a time, and wait for
+> me to confirm each one.
 
 ## 4. Get your token 🔑
 
@@ -394,6 +451,76 @@ Full setup walkthrough: [references/setup.md](references/setup.md).
 ---
 
 ## FAQ ❓
+
+<details>
+<summary><strong>What is an MCP server?</strong></summary>
+
+Model Context Protocol is a standard way to give an AI assistant access to a
+tool or a data source. An MCP server exposes a set of functions, and a client
+like Claude Code or Claude Desktop calls them during a conversation. This one
+exposes Facebook Pages.
+
+You install it once, point your client at it, and then ask in plain language.
+You never call the tools yourself.
+</details>
+
+<details>
+<summary><strong>Why do I have to create a Meta app? That seems like a lot.</strong></summary>
+
+Because Facebook has no other way to issue a token. There are no app passwords
+and no personal access tokens, so every credential is minted by an app someone
+owns. For a personal tool, that someone is you.
+
+It is free, takes about ten minutes, and only happens once. Nothing is
+reviewed, nothing is published, and nobody else sees the app.
+</details>
+
+<details>
+<summary><strong>Will this get my Page banned?</strong></summary>
+
+No. This is Meta's own API used the way Meta intends. The account risk that
+exists on Instagram's unofficial API, or on WhatsApp's companion protocol, does
+not apply here.
+
+The real limit is rate limiting, which is per app rather than per Page. Heavy
+automated use across several Pages shares one budget.
+</details>
+
+<details>
+<summary><strong>What data does it store, and where?</strong></summary>
+
+One file, `~/.facebook-mcp/pages.json`, written mode 600. It holds your Page
+ids and their tokens, nothing else.
+
+No posts, no comments and no insights are stored. Everything is fetched live
+and passed straight to your client, so there is no local copy of your content.
+
+If you set `FACEBOOK_AUDIT_LOG`, every attempted write is appended to that file
+as well.
+</details>
+
+<details>
+<summary><strong>Does it cost anything?</strong></summary>
+
+No. The Graph API is free for this, the Meta app is free, and there is no
+paid tier involved. You pay for whatever AI client you use, and nothing else.
+</details>
+
+<details>
+<summary><strong>Why is the package name not just "facebook-mcp"?</strong></summary>
+
+npm names are first come, first served, and unscoped ones go quickly. Scoped
+packages like `@thenavidm/facebook-mcp` avoid the scramble and make it obvious
+who published it, which matters for something that holds credentials.
+</details>
+
+<details>
+<summary><strong>Can I use it with several Pages?</strong></summary>
+
+Yes. `login` stores every Page you administer, and each tool takes a `page`
+argument. Set `FACEBOOK_PREFERRED_PAGES` so an unnamed action lands somewhere
+predictable rather than on whichever was stored first.
+</details>
 
 <details>
 <summary><strong>Do I need App Review?</strong></summary>
