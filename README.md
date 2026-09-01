@@ -9,11 +9,15 @@
 [![YouTube](https://img.shields.io/badge/YouTube-@thenavidm-red?logo=youtube&logoColor=white)](https://youtube.com/@thenavidm?sub_confirmation=1)
 [![X](https://img.shields.io/badge/X-@thenavidm-black?logo=x)](https://x.com/thenavidm)
 
-Give any AI agent real access to your Facebook Pages. Post, schedule, draft, read your numbers, and moderate comments, from Claude Code, Claude Desktop, Claude.ai, Cursor, Codex, or any MCP client.
+Facebook MCP server for Claude Code and AI agents. Posting, scheduling, drafts, Page and post insights, and comment moderation.
 
-Built on Meta's official Graph API, so nothing here is reverse engineered and nothing is going to break when Facebook ships an update.
+Setup needs a Meta developer app. There is no way around that: Facebook only issues Page tokens through an app you own. You create one once, generate a user token, and `login` exchanges it for Page tokens that never expire.
 
-Built by [Navid Moazzez](https://navid.me?utm_source=github&utm_medium=readme&utm_campaign=facebook-mcp).
+Pages only. Facebook removed personal profile posting from the API in 2018 and never replaced it, so no tool can do it, including this one.
+
+Scheduling is real. Facebook holds the post and publishes it itself, so nothing has to be running on your machine at the time.
+
+15 tools, across as many Pages as you administer.
 
 ```
 You: how did last week's posts do, and schedule the follow-up for Tuesday 9am
@@ -30,55 +34,142 @@ Claude: Reading your Page insights.
 
 | | Section | |
 |---|---|---|
-| 1 | [What you can ask it](#1-what-you-can-ask-it) | Real prompts, not features |
-| 2 | [Install](#2-install) | Every client, copy and paste |
-| 3 | [Connecting your Page](#3-connecting-your-page) | Getting a token that lasts |
-| 4 | [Tools](#4-tools) | All fifteen, with arguments |
-| 5 | [Posting safely](#5-posting-safely) | Why it cannot post by default |
-| 6 | [Several Pages](#6-several-pages) | Picking which one acts |
-| 7 | [Limits worth knowing](#7-limits-worth-knowing) | What Facebook will not let you do |
-| 8 | [Troubleshooting](#8-troubleshooting) | When something breaks |
-| 9 | [FAQ](#faq-) | Common questions |
+| 1 | [What you can ask it](#1-what-you-can-ask-it-) | Real prompts, not features |
+| 2 | [Quick install](#2-quick-install-) | One command |
+| 3 | [Create your Meta app](#3-create-your-meta-app-) | The setup step there is no way around |
+| 4 | [Get your token](#4-get-your-token-) | And make it permanent |
+| 5 | [Connect your client](#5-connect-your-client-) | Every client, copy and paste |
+| 6 | [Check it worked](#6-check-it-worked-) | One command that says what is broken |
+| 7 | [Tools](#7-tools-) | All fifteen |
+| 8 | [Posting safely](#8-posting-safely-) | Three levels, three switches |
+| 9 | [Several Pages](#9-several-pages-) | Picking which one acts |
+| 10 | [Limits worth knowing](#10-limits-worth-knowing-) | What Facebook will not let you do |
+| 11 | [Troubleshooting](#11-troubleshooting-) | When something breaks |
+| 12 | [FAQ](#faq-) | Common questions |
 
 ---
 
-## 1. What you can ask it
+## 1. What you can ask it 💬
 
 - Schedule this post for Tuesday at 9am.
 - How did last week's posts do compared to the week before?
-- Draft three versions of an announcement and save them, I will pick one.
+- Draft three versions of the announcement and save them, I will pick one.
 - Which post this month got the most engagement, and why do you think that is?
 - Read the comments on the latest post and tell me if anything needs a reply.
 - Hide the spam comments on that post.
 - What is my follower growth over the last month?
 
-The point is the loop. You can ask what worked, then act on the answer, without leaving the conversation.
+The point is the loop. Ask what worked, then act on the answer, without leaving
+the conversation.
 
 ---
 
-## 2. Install
+## 2. Quick install ⚡
 
 ```bash
 npx -y @thenavidm/facebook-mcp --version
 ```
 
-Node 20 or newer. Nothing else.
+Node 20 or newer. Nothing else to install.
 
-Then add it to your client.
+That gets you the server. Connecting a Page is the next three sections, and it
+is the part that takes real time.
 
-#### Claude Code
+---
+
+## 3. Create your Meta app 🔑
+
+Facebook has no app passwords and no personal tokens. Every credential comes
+through an app you own, so you make one once.
+
+**You do not need App Review, and you do not need Business Verification.** Those
+are only for managing Pages belonging to other people, which Meta calls
+Advanced Access. For your own Pages, Standard Access is enough and it is
+granted the moment you ask.
+
+### Step 1: create the app
+
+1. [developers.facebook.com/apps](https://developers.facebook.com/apps), then
+   **Create app**
+2. Use case: **Other**. App type: **Business**. That type is the one that
+   exposes the Pages permissions
+3. Any name. Nobody else sees it
+
+### Step 2: add the permissions
+
+**App Review**, then **Permissions and Features**. Request Standard Access for
+each. It is granted immediately.
+
+| Permission | What it is for |
+|---|---|
+| `pages_show_list` | Seeing which Pages you administer. Without it, login finds nothing |
+| `pages_read_engagement` | Reading posts, comments, followers and Page metadata |
+| `pages_manage_posts` | Creating, editing and deleting posts |
+| `pages_manage_engagement` | Replying to, hiding and deleting comments |
+| `read_insights` | Impressions, reach and engagement numbers |
+
+The one people miss is `pages_read_engagement`. It reads like a write
+permission and is not. Leave it out and reading breaks while posting still
+works, which is a confusing way to fail.
+
+---
+
+## 4. Get your token 🔑
+
+### Generate one
+
+1. [Graph API Explorer](https://developers.facebook.com/tools/explorer/)
+2. Pick your app, top right
+3. Under **Permissions**, add the five above
+4. **Generate Access Token**, and approve
+
+That token dies in about an hour. It does not matter, it is used once.
+
+### Exchange it for Page tokens
+
+```bash
+npx @thenavidm/facebook-mcp login <that token>
+```
+
+Writes `~/.facebook-mcp/pages.json`, mode 600, one token per Page you
+administer.
+
+### Make them permanent
+
+Left alone, those Page tokens expire with the user token they came from. That
+is the single most common reason this stops working the next day.
+
+```bash
+export FACEBOOK_APP_ID=...
+export FACEBOOK_APP_SECRET=...
+npx @thenavidm/facebook-mcp login <that token>
+```
+
+Both are under **Settings**, then **Basic** in your app. With them, login
+extends the user token first, and the Page tokens it derives never expire.
+
+### One app also covers Instagram and Threads
+
+The same Meta app can carry the Instagram and Threads permissions. If you plan
+to use those too, add their products now rather than making three apps.
+
+---
+
+## 5. Connect your client 🔌
+
+### Claude Code
 
 ```bash
 claude mcp add --transport stdio facebook -- npx -y @thenavidm/facebook-mcp
 ```
 
-To allow posting as well as reading:
+With posting allowed:
 
 ```bash
 claude mcp add --transport stdio --env FACEBOOK_ALLOW_WRITE=true facebook -- npx -y @thenavidm/facebook-mcp
 ```
 
-#### Claude Desktop
+### Claude Desktop
 
 | Platform | Path |
 |---|---|
@@ -99,22 +190,12 @@ claude mcp add --transport stdio --env FACEBOOK_ALLOW_WRITE=true facebook -- npx
 
 Quit Claude Desktop completely and reopen it.
 
-#### Cursor
+### Cursor
 
-`~/.cursor/mcp.json` for every project, or `.cursor/mcp.json` inside one.
+`~/.cursor/mcp.json` for every project, or `.cursor/mcp.json` inside one. Same
+shape as Claude Desktop.
 
-```json
-{
-  "mcpServers": {
-    "facebook": {
-      "command": "npx",
-      "args": ["-y", "@thenavidm/facebook-mcp"]
-    }
-  }
-}
-```
-
-#### VS Code with GitHub Copilot
+### VS Code with GitHub Copilot
 
 `.vscode/mcp.json`. Note it uses `servers`, not `mcpServers`.
 
@@ -130,13 +211,9 @@ Quit Claude Desktop completely and reopen it.
 }
 ```
 
-#### Windsurf
+### Windsurf, Zed, Cline, Codex CLI, Gemini CLI
 
-`~/.codeium/windsurf/mcp_config.json`, same shape as Cursor.
-
-#### Codex CLI
-
-`~/.codex/config.toml`:
+All take the same stdio shape. Codex uses TOML:
 
 ```toml
 [mcp_servers.facebook]
@@ -144,204 +221,218 @@ command = "npx"
 args = ["-y", "@thenavidm/facebook-mcp"]
 ```
 
-#### Any other MCP client
+### Docker
 
-| Field | Value |
-|---|---|
-| Transport | stdio |
-| Command | `npx` |
-| Arguments | `-y @thenavidm/facebook-mcp` |
+```bash
+docker build -t facebook-mcp .
+docker run -i --rm -v facebook-mcp:/home/node/.facebook-mcp facebook-mcp
+```
+
+The volume matters. Page tokens live in the home directory, and without it
+every login is written into a container that is about to disappear.
 
 ---
 
-## 3. Connecting your Page
-
-Facebook tokens are the fiddly part, so this is the whole thing in order.
-
-**Get a user token.** Go to [Graph API Explorer](https://developers.facebook.com/tools/explorer/). Pick your app, or create one. Add these permissions:
-
-```
-pages_show_list
-pages_manage_posts
-pages_read_engagement
-pages_manage_engagement
-read_insights
-```
-
-Click Generate Access Token and copy it.
-
-**Exchange it for Page tokens.**
-
-```bash
-npx @thenavidm/facebook-mcp login <that token>
-```
-
-That writes `~/.facebook-mcp/pages.json`, mode 600, holding one token per Page you administer.
-
-**Make them permanent.** The token from the Explorer expires in about an hour, and Page tokens derived from it inherit that. To get ones that never expire, set your app credentials first:
-
-```bash
-export FACEBOOK_APP_ID=...
-export FACEBOOK_APP_SECRET=...
-npx @thenavidm/facebook-mcp login <that token>
-```
-
-Both are on your app's Settings, Basic page. With them, login exchanges for a long-lived token first, and the resulting Page tokens do not expire at all.
-
-**Check it worked.**
+## 6. Check it worked 🩺
 
 ```bash
 npx @thenavidm/facebook-mcp doctor
 ```
 
-It names every Page it can reach, or says exactly which link in the chain is broken.
+It names every Page it can reach, with follower counts. If something is wrong
+it says which link in the chain broke, because Meta's own error rarely does.
 
 ---
 
-## 4. Tools
+## 7. Tools 🧰
 
-Fifteen. Each declares whether it reads or writes, so your client can show you before anything runs.
+Fifteen. Each declares whether it reads or writes, so your client can show you
+before anything runs.
 
-| Tool | | What it does |
+### Your Pages
+
+| Tool | | |
 |---|---|---|
 | `list_pages` | read | Every Page this server can act as |
 | `get_page` | read | Name, category, followers, about, website |
+
+### Posting
+
+| Tool | | |
+|---|---|---|
+| `create_post` | write | Text post, optionally with a link |
+| `create_photo_post` | write | Photo from a URL, with a caption |
+| `publish_draft` | write | Push a draft or scheduled post out now |
+| `update_post` | write | Edit the text of a published post |
+| `delete_post` | delete | Cannot be undone |
 | `list_posts` | read | Published posts with reaction, comment and share counts |
 | `list_scheduled_posts` | read | Scheduled and draft posts not yet out |
+
+### Comments
+
+| Tool | | |
+|---|---|---|
+| `list_comments` | read | With author and time |
+| `reply_to_comment` | write | Public reply, as the Page |
+| `hide_comment` | write | Hide or unhide. Reversible |
+| `delete_comment` | delete | Cannot be undone |
+
+### Numbers
+
+| Tool | | |
+|---|---|---|
 | `get_page_insights` | read | Impressions, reach, engagement, follower change |
 | `get_post_insights` | read | How one post did |
-| `list_comments` | read | Comments with author and time |
-| `create_post` | **write** | Text post, optionally with a link |
-| `create_photo_post` | **write** | Photo from a URL, with a caption |
-| `publish_draft` | **write** | Push a draft or scheduled post out now |
-| `update_post` | **write** | Edit the text of a published post |
-| `reply_to_comment` | **write** | Public reply, as the Page |
-| `hide_comment` | **write** | Hide or unhide. Reversible |
-| `delete_post` | **delete** | Cannot be undone |
-| `delete_comment` | **delete** | Cannot be undone |
 
 ### Scheduling and drafts
 
-`create_post` covers all three cases:
+`create_post` covers three cases with one tool:
 
-| | |
+| Intent | Arguments |
 |---|---|
-| Post now | just `message` |
-| Save a draft | `draft: true` |
-| Schedule | `publish_at`, an ISO timestamp |
+| Post now | `message` |
+| Save a draft | `message`, `draft: true` |
+| Schedule | `message`, `publish_at` as an ISO timestamp |
 
-Facebook requires a scheduled time at least 10 minutes out and at most 6 months ahead. Its own error for breaking that says nothing useful, so this checks first and tells you which rule you hit.
-
----
-
-## 5. Posting safely
-
-A Page post is public the moment it lands, in front of everyone who follows you. Deleting one is worse, because it cannot be undone.
-
-Those are two different levels of risk, so they are two different switches.
-
-**Reading needs nothing.** Insights, posts and comments work out of the box.
-
-**Writing needs `FACEBOOK_ALLOW_WRITE=true`.** Posting, editing, replying and hiding all refuse without it. A default install cannot publish anything.
-
-**Deleting needs `FACEBOOK_ALLOW_DELETE=true` as well.** Deliberately separate, because deleting a post is the one action here with no undo.
-
-**Every write can be logged.** Set `FACEBOOK_AUDIT_LOG=/path/to/file` and every attempt is appended, with no tool able to read or edit it.
-
-Comment text is also labelled as data rather than instructions when handed to the model. Comments are written by strangers, and an agent that reads them and can also post is exposed to whatever they put there.
+Facebook requires 10 minutes to 6 months ahead. Its own error for breaking that
+says nothing useful, so this checks first and tells you which rule you hit.
 
 ---
 
-## 6. Several Pages
+## 8. Posting safely 🔒
 
-If you administer more than one, `list_pages` shows them and every tool takes a `page` argument to name one.
+A Page post is public the moment it lands. Deleting one cannot be undone. Two
+different risks, so two different switches.
 
-When you do not name one, it uses the first, which is rarely what you want. Set an order instead:
+**Reading** needs nothing.
+
+**Writing** needs `FACEBOOK_ALLOW_WRITE=true`. Posting, editing, replying and
+hiding all refuse without it, so a default install cannot publish anything.
+
+**Deleting** needs `FACEBOOK_ALLOW_DELETE=true` as well.
+
+**Every write can be logged.** Set `FACEBOOK_AUDIT_LOG=/path/to/file` and every
+attempt is appended, with no tool able to read or edit it.
+
+Comment text is labelled as data rather than instructions when handed to the
+model. Comments are written by strangers, and an agent that reads them and can
+also post is exposed to whatever they put there.
+
+---
+
+## 9. Several Pages 📄
+
+`list_pages` shows them, and every tool takes a `page` argument to name one.
+
+Unnamed, it uses the first, which is rarely what you want. Set an order:
 
 ```bash
 export FACEBOOK_PREFERRED_PAGES="Navid Media,Side Project"
 ```
 
-Exact name matches beat prefix matches, so a Page called "Navid Media" will not swallow a request meant for "Navid".
+Exact name matches beat prefix matches, so a Page called "Navid Media" will not
+swallow a request meant for "Navid".
 
 ---
 
-## 7. Limits worth knowing
+## 10. Limits worth knowing ⚠️
 
-**Pages only.** Facebook removed the ability to post to a personal profile in 2018 and never replaced it. No API can do it, including this one.
+**Pages only.** Facebook removed personal profile posting from the API in 2018
+and never replaced it. No tool can do it.
 
-**Insights lag.** Numbers can take a few hours to settle, so today's post will look quieter than it is.
+**Insights lag** by a few hours, so this morning's post looks quieter than it
+is.
 
-**Rate limits are per app, not per Page.** Heavy use across several Pages shares one budget. The client backs off and retries reads, but never retries a write, because retrying a post risks publishing twice.
+**Rate limits are per app, not per Page.** Heavy use across several Pages
+shares one budget. Reads back off and retry; writes never retry, because
+retrying a post risks publishing twice.
 
-**Edits are visible.** Facebook shows viewers an edit history on any post you change.
+**Edits are visible.** Facebook shows viewers an edit history on any post you
+change.
 
 ---
 
-## 8. Troubleshooting
+## 11. Troubleshooting 🔧
 
-**"The Page token is invalid or expired."** The token was short-lived. Set `FACEBOOK_APP_ID` and `FACEBOOK_APP_SECRET` and run `login` again for permanent ones.
+**"The Page token is invalid or expired."** The token was short-lived. Set
+`FACEBOOK_APP_ID` and `FACEBOOK_APP_SECRET` and run `login` again.
 
-**"The token is missing a permission."** Regenerate in the Graph API Explorer with all five permissions listed above. Missing `pages_read_engagement` is the usual one, and it breaks reading rather than writing, which makes it confusing.
+**"The token is missing a permission."** Regenerate with all five permissions.
+Missing `pages_read_engagement` is the usual one, and it breaks reading rather
+than writing, which makes it confusing.
 
-**"That token can see no Pages."** It is missing `pages_show_list`, or you are not an admin of any Page.
+**"That token can see no Pages."** Missing `pages_show_list`, or you are not an
+admin of any Page.
 
 **Posting refuses.** That is the default. Set `FACEBOOK_ALLOW_WRITE=true`.
 
-**Nothing works and the error is vague.** Run `doctor`. It checks each Page and reports the first broken link.
+**Anything else.** Run `doctor`. It checks each Page and reports the first
+broken link.
+
+Full setup walkthrough: [references/setup.md](references/setup.md).
 
 ---
 
 ## FAQ ❓
 
 <details>
-<summary><strong>Can it post to my personal profile?</strong></summary>
+<summary><strong>Do I need App Review?</strong></summary>
 
-No, and neither can anything else. Facebook removed profile posting from the API in 2018 after Cambridge Analytica and never brought it back. Pages are the only writable surface.
+No, not for your own Pages. App Review and Business Verification are for
+managing Pages belonging to other people, which Meta calls Advanced Access. For
+Pages you administer, Standard Access is enough and is granted the moment you
+request it.
 </details>
 
 <details>
-<summary><strong>Is this using an unofficial API?</strong></summary>
+<summary><strong>Can it post to my personal profile?</strong></summary>
 
-No. It is Meta's official Graph API, the same one their own tools use. Nothing is reverse engineered, nothing violates their terms, and your account is not at risk.
+No, and neither can anything else. Facebook removed profile posting from the
+API in 2018 and never brought it back. Pages are the only writable surface.
+</details>
+
+<details>
+<summary><strong>Is this an unofficial API?</strong></summary>
+
+No. It is Meta's official Graph API, the same one their own tools use. Nothing
+is reverse engineered and your account is not at risk.
 </details>
 
 <details>
 <summary><strong>Do the tokens expire?</strong></summary>
 
-Page tokens derived from a long-lived user token do not expire at all. That is why `login` exchanges for one when you give it your app id and secret.
-
-Without them you get short-lived tokens that die in about an hour, which is the single most common reason this stops working.
+Page tokens derived from a long-lived user token do not expire at all. Without
+your app id and secret, login can only produce short-lived ones that die in
+about an hour, which is the most common reason this stops working.
 </details>
 
 <details>
 <summary><strong>Can it schedule posts?</strong></summary>
 
-Yes, natively. Facebook is one of the few platforms whose API supports real scheduling and real drafts, so nothing here is queued locally waiting for your machine to be awake. You hand it to Facebook and it goes out whether or not anything of yours is running.
+Yes, natively. Facebook holds the post and publishes it itself, so nothing has
+to be running on your machine at the time. Real drafts too.
 </details>
 
 <details>
 <summary><strong>Will it post something without me knowing?</strong></summary>
 
-It cannot post at all unless you set `FACEBOOK_ALLOW_WRITE=true`. With that on, it can, so set `FACEBOOK_AUDIT_LOG` and every attempt is written to a file no tool can edit.
+It cannot post at all unless you set `FACEBOOK_ALLOW_WRITE=true`. With that on
+it can, so set `FACEBOOK_AUDIT_LOG` and every attempt is written to a file no
+tool can edit.
 </details>
 
 <details>
-<summary><strong>What about Instagram?</strong></summary>
+<summary><strong>Does one Meta app cover Instagram and Threads too?</strong></summary>
 
-Different server. Instagram's official API is business accounts only and quite limited, so reaching a personal account means an unofficial library. That is a separate project with a different risk profile.
-</details>
-
-<details>
-<summary><strong>Does it work with several Pages?</strong></summary>
-
-Yes. `login` stores every Page you administer, and each tool takes a `page` argument. Set `FACEBOOK_PREFERRED_PAGES` so an unnamed action lands somewhere predictable.
+Yes. The same app can carry all three sets of permissions, so add those
+products now if you plan to use them rather than creating three apps.
 </details>
 
 <details>
 <summary><strong>Can it read comments and reply?</strong></summary>
 
-Yes, both. It can also hide comments, which is reversible and the right answer for spam. Deleting is possible but needs a separate switch, since it cannot be undone.
+Yes, both, and it can hide comments, which is reversible and the right answer
+for spam. Deleting is possible but needs a separate switch.
 </details>
 
 ---
