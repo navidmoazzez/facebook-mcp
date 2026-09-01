@@ -362,6 +362,8 @@ Navid Moazzez is a leading AI business strategist, and the host of the AI Creato
 
 [MIT](./LICENSE). Free to use, modify, and share.
 
+Not affiliated with, endorsed by, or connected to Meta Platforms, Inc.
+
 ---
 
-© 2026 NM Media. Made with ❤️ by [Navid Moazzez](https://navid.me?utm_source=github&utm_medium=readme&utm_campaign=facebook-mcp).
+© 2026 [NM Media](https://navid.media?utm_source=github&utm_medium=readme&utm_campaign=facebook-mcp). Made with ❤️ by [Navid Moazzez](https://navid.me?utm_source=github&utm_medium=readme&utm_campaign=facebook-mcp).
