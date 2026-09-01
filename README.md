@@ -123,41 +123,40 @@ granted the moment you ask.
 > Incompatible combinations grey out. If an option will not tick, it conflicts
 > with something already selected.
 
-### Step 1: create the app
+### Step 1: the creation wizard
 
-1. Go to
-   [developers.facebook.com/apps/creation](https://developers.facebook.com/apps/creation/)
-   and log in.
-2. **App details.** Enter a name and a contact email, then **Next**. The name
-   is only shown to you at this stage.
-3. **Use cases.** Tick **Manage everything on your Page**, plus any others from
-   the table above. Then **Next**.
+[developers.facebook.com/apps/creation](https://developers.facebook.com/apps/creation/).
+Five screens, in this order.
 
-   That one use case covers publishing, reading posts and insights, and
-   moderating comments. There is no separate "Pages API" option, which is what
-   people look for and do not find.
+**App details.** A name, up to 30 characters, and a contact email. The name is
+only shown on your own My Apps page and can be changed later.
 
-> [!IMPORTANT]
-> **Older guides say to pick "Other" and then an app type of "Business". That
-> is the old screen.**
->
-> Meta reorganised app creation around use cases: you pick what you want to do
-> and Meta adds the products for you. "Other" still exists for app types none
-> of the use cases cover, but it is not the route here, and taking it means
-> adding every product and permission by hand afterwards.
+**Use cases.** This is where people get stuck. The screen opens on
+**Featured (6)**, and the Pages use case is not one of the six. Change the
+filter on the left to **All (20)** or **Content management (5)** to find it.
 
-### Step 2: connect a business portfolio
+The featured six are Marketing API, app ads, Threads, Instant Games, Facebook
+Login and WhatsApp. None of those is what you want.
 
-Meta asks which business portfolio the app belongs to. Pick an existing one, or
-create one. It is free, it takes a moment, and it is only an ownership record.
+**Business.** Which business portfolio the app belongs to. An unverified one is
+fine, and "I don't want to connect a business portfolio yet" is a valid answer
+you can revisit. Verification is only needed to reach other people's data.
 
-This step is easy to rush past and then hard to undo, because moving an app
-between portfolios later is awkward.
+**Requirements.** For a Pages app on your own Pages this reads "No requirements
+identified". That is the screen confirming you do not need App Review.
 
-### Step 3: add the permissions
+**Overview.** Review and **Create app**.
 
-Open **App Review**, then **Permissions and Features**. Request **Standard
-Access** for each. It is granted immediately, with no review.
+### Step 2: add the permissions by hand
+
+Creating the app does **not** give you the permissions. This is the step every
+guide skips, and without it `login` will fail.
+
+Open your app, click the use case in the left sidebar, then **Permissions and
+features**. You get a table of every permission that use case can grant, and
+almost all of them start unadded, showing a dash in the Status column.
+
+Click **+ Add** on each of these:
 
 | Permission | What it is for |
 |---|---|
@@ -167,17 +166,50 @@ Access** for each. It is granted immediately, with no review.
 | `pages_manage_engagement` | Replying to, hiding and deleting comments |
 | `read_insights` | Impressions, reach and engagement numbers |
 
-The one people miss is `pages_read_engagement`. It reads like a write
-permission and is not. Leave it out and reading breaks while posting still
-works, which is a confusing way to fail.
+Added permissions move to **Ready for testing**, which is the state you want.
+That is Standard Access, it is immediate, and nothing is reviewed.
 
-### Step 4: check the Page is linked
+Those five are what this server needs. The Pages API exposes far more, covering
+messaging, leads, monetization and ads, grouped by Meta into tasks like
+`CREATE_CONTENT`, `MODERATE`, `ANALYZE` and `MESSAGING`. Add more only if you
+have a reason, since each one widens what an agent holding the token can do.
 
-Your Page must belong to the same business portfolio as the app, or the app
-will not see it and `login` will report no Pages.
+There is also **Add more to this use case** in the sidebar, which widens what
+the use case can grant if something you need is not in the list.
 
-**Business settings**, then **Accounts**, then **Pages**. If the Page is not
-listed, add it there first.
+> [!TIP]
+> The one people miss is `pages_read_engagement`. It reads like a write
+> permission and is not. Leave it out and reading breaks while posting still
+> works, which is a confusing way to fail.
+
+### Step 3: make sure you have an app role
+
+Standard Access only works for people who hold a **role on the app**. As its
+creator you are automatically an admin, so this is usually already true and
+worth knowing rather than doing.
+
+It matters when it is not you. Anyone else who wants to use your app, a
+colleague or a second account of your own, has to be added under **App roles**,
+then **Roles**, as an Administrator, Developer or Tester. Without a role they
+cannot grant the permissions at all, and Meta's error does not say why.
+
+**Test users** live in the same place. They are throwaway accounts Meta
+generates for you, useful for trying a destructive tool without pointing it at
+a real Page. They cannot administer a real Page, so they are for testing the
+plumbing, not the content.
+
+**Business Verification** is a separate thing again, and you do not need it
+here. It is required for **Advanced Access**, which is what you would need to
+manage Pages belonging to people who have no role on your app. For your own
+Pages, Standard Access is enough.
+
+### Step 4: check the Page is in the same portfolio
+
+Your Page must belong to the business portfolio you attached to the app, or the
+app cannot see it and `login` reports no Pages.
+
+**Business settings**, then **Accounts**, then **Pages**. If it is not listed,
+add it there first.
 
 ### Rather have an agent do it
 
