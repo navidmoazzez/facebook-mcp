@@ -45,8 +45,6 @@ Claude: Reading your Page insights.
 | 11 | [Troubleshooting](#11-troubleshooting-) | When something breaks |
 | 12 | [FAQ](#faq-) | Common questions |
 
----
-
 ## 1. What you can ask it 💬
 
 - Schedule this for Tuesday at 9am, and draft two alternatives I can pick from.
@@ -80,8 +78,6 @@ another tab or copying anything between windows.
 Reading works as soon as a Page is connected. Posting stays off until you set
 one environment variable, deliberately.
 
----
-
 ## 2. Quick install ⚡
 
 ```bash
@@ -92,8 +88,6 @@ Node 20 or newer. Nothing else to install.
 
 That gets you the server. Connecting a Page is the next three sections, and it
 is the part that takes real time.
-
----
 
 ## 3. Create your Meta app 🔑
 
@@ -260,8 +254,6 @@ extends the user token first, and the Page tokens it derives never expire.
 The same Meta app can carry the Instagram and Threads permissions. If you plan
 to use those too, add their products now rather than making three apps.
 
----
-
 ## 5. Connect your client 🔌
 
 ### Claude Code
@@ -338,8 +330,6 @@ docker run -i --rm -v facebook-mcp:/home/node/.facebook-mcp facebook-mcp
 The volume matters. Page tokens live in the home directory, and without it
 every login is written into a container that is about to disappear.
 
----
-
 ## 6. Check it worked 🩺
 
 ```bash
@@ -348,8 +338,6 @@ npx @thenavidm/facebook-mcp doctor
 
 It names every Page it can reach, with follower counts. If something is wrong
 it says which link in the chain broke, because Meta's own error rarely does.
-
----
 
 ## 7. Tools 🧰
 
@@ -404,8 +392,6 @@ before anything runs.
 Facebook requires 10 minutes to 6 months ahead. Its own error for breaking that
 says nothing useful, so this checks first and tells you which rule you hit.
 
----
-
 ## 8. Posting safely 🔒
 
 A Page post is public the moment it lands. Deleting one cannot be undone. Two
@@ -425,8 +411,6 @@ Comment text is labelled as data rather than instructions when handed to the
 model. Comments are written by strangers, and an agent that reads them and can
 also post is exposed to whatever they put there.
 
----
-
 ## 9. Several Pages 📄
 
 `list_pages` shows them, and every tool takes a `page` argument to name one.
@@ -439,8 +423,6 @@ export FACEBOOK_PREFERRED_PAGES="Navid Media,Side Project"
 
 Exact name matches beat prefix matches, so a Page called "Navid Media" will not
 swallow a request meant for "Navid".
-
----
 
 ## 10. Limits worth knowing ⚠️
 
@@ -456,8 +438,6 @@ retrying a post risks publishing twice.
 
 **Edits are visible.** Facebook shows viewers an edit history on any post you
 change.
-
----
 
 ## 11. Troubleshooting 🔧
 
@@ -477,8 +457,6 @@ admin of any Page.
 broken link.
 
 Full setup walkthrough: [references/setup.md](references/setup.md).
-
----
 
 ## FAQ ❓
 
@@ -626,8 +604,6 @@ Yes, both, and it can hide comments, which is reversible and the right answer
 for spam. Deleting is possible but needs a separate switch.
 
 </details>
-
----
 
 ## About the author
 
