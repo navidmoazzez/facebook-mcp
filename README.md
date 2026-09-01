@@ -1,6 +1,4 @@
-<div align="center">
-  <img src="https://cdn.navid.media/connectors/facebook-icon.png" alt="Facebook" width="88">
-</div>
+<img src="https://cdn.navid.media/connectors/facebook-icon.png" alt="Facebook" width="88">
 
 # Facebook MCP
 
@@ -494,6 +492,7 @@ exposes Facebook Pages.
 
 You install it once, point your client at it, and then ask in plain language.
 You never call the tools yourself.
+
 </details>
 
 <details>
@@ -505,6 +504,7 @@ owns. For a personal tool, that someone is you.
 
 It is free, takes about ten minutes, and only happens once. Nothing is
 reviewed, nothing is published, and nobody else sees the app.
+
 </details>
 
 <details>
@@ -516,6 +516,7 @@ not apply here.
 
 The real limit is rate limiting, which is per app rather than per Page. Heavy
 automated use across several Pages shares one budget.
+
 </details>
 
 <details>
@@ -529,6 +530,7 @@ and passed straight to your client, so there is no local copy of your content.
 
 If you set `FACEBOOK_AUDIT_LOG`, every attempted write is appended to that file
 as well.
+
 </details>
 
 <details>
@@ -536,6 +538,7 @@ as well.
 
 No. The Graph API is free for this, the Meta app is free, and there is no
 paid tier involved. You pay for whatever AI client you use, and nothing else.
+
 </details>
 
 <details>
@@ -544,6 +547,7 @@ paid tier involved. You pay for whatever AI client you use, and nothing else.
 npm names are first come, first served, and unscoped ones go quickly. Scoped
 packages like `@thenavidm/facebook-mcp` avoid the scramble and make it obvious
 who published it, which matters for something that holds credentials.
+
 </details>
 
 <details>
@@ -552,6 +556,7 @@ who published it, which matters for something that holds credentials.
 Yes. `login` stores every Page you administer, and each tool takes a `page`
 argument. Set `FACEBOOK_PREFERRED_PAGES` so an unnamed action lands somewhere
 predictable rather than on whichever was stored first.
+
 </details>
 
 <details>
@@ -561,6 +566,7 @@ No, not for your own Pages. App Review and Business Verification are for
 managing Pages belonging to other people, which Meta calls Advanced Access. For
 Pages you administer, Standard Access is enough and is granted the moment you
 request it.
+
 </details>
 
 <details>
@@ -568,6 +574,7 @@ request it.
 
 No, and neither can anything else. Facebook removed profile posting from the
 API in 2018 and never brought it back. Pages are the only writable surface.
+
 </details>
 
 <details>
@@ -575,6 +582,7 @@ API in 2018 and never brought it back. Pages are the only writable surface.
 
 No. It is Meta's official Graph API, the same one their own tools use. Nothing
 is reverse engineered and your account is not at risk.
+
 </details>
 
 <details>
@@ -583,6 +591,7 @@ is reverse engineered and your account is not at risk.
 Page tokens derived from a long-lived user token do not expire at all. Without
 your app id and secret, login can only produce short-lived ones that die in
 about an hour, which is the most common reason this stops working.
+
 </details>
 
 <details>
@@ -590,6 +599,7 @@ about an hour, which is the most common reason this stops working.
 
 Yes, natively. Facebook holds the post and publishes it itself, so nothing has
 to be running on your machine at the time. Real drafts too.
+
 </details>
 
 <details>
@@ -598,6 +608,7 @@ to be running on your machine at the time. Real drafts too.
 It cannot post at all unless you set `FACEBOOK_ALLOW_WRITE=true`. With that on
 it can, so set `FACEBOOK_AUDIT_LOG` and every attempt is written to a file no
 tool can edit.
+
 </details>
 
 <details>
@@ -605,6 +616,7 @@ tool can edit.
 
 Yes. The same app can carry all three sets of permissions, so add those
 products now if you plan to use them rather than creating three apps.
+
 </details>
 
 <details>
@@ -612,6 +624,7 @@ products now if you plan to use them rather than creating three apps.
 
 Yes, both, and it can hide comments, which is reversible and the right answer
 for spam. Deleting is possible but needs a separate switch.
+
 </details>
 
 ---
