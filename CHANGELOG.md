@@ -1,4 +1,4 @@
-# Facebook MCP Versions
+# Facebook MCP changelog
 
 | Component | Version | Last Updated |
 |-----------|---------|--------------|
