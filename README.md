@@ -18,16 +18,7 @@ Scheduling is real. Facebook holds the post and publishes it itself, so nothing 
 
 15 tools, across as many Pages as you administer.
 
-```
-You: how did last week's posts do, and schedule the follow-up for Tuesday 9am
-
-Claude: Reading your Page insights.
-
-  3 posts, 14,200 impressions, 380 engagements
-  The Thursday one did 4x the others
-
-  Scheduled the follow-up for Tuesday 09:00.
-```
+<img src="https://cdn.navid.media/repos/facebook-mcp.gif?v=1" alt="Claude Code using the Facebook MCP server" width="520">
 
 ## Contents
 
