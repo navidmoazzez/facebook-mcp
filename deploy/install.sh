@@ -6,7 +6,7 @@
 # pointed at an absolute path.
 set -euo pipefail
 
-REPO="${FACEBOOK_MCP_REPO:-https://github.com/navidmoazzez/facebook-mcp.git}"
+REPO="${FACEBOOK_MCP_REPO:-https://github.com/thenavidm/facebook-mcp.git}"
 DIR="${FACEBOOK_MCP_DIR:-$HOME/.local/share/facebook-mcp}"
 
 need() {

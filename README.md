@@ -101,8 +101,8 @@ granted the moment you ask.
 > | Use case | For | Server |
 > |---|---|---|
 > | Manage everything on your Page | Facebook Pages | this one |
-> | Manage messaging and content on Instagram | Instagram | [instagram-mcp](https://github.com/navidmoazzez/instagram-mcp) |
-> | Access Threads API | Threads | [threads-mcp](https://github.com/navidmoazzez/threads-mcp) |
+> | Manage messaging and content on Instagram | Instagram | [instagram-mcp](https://github.com/thenavidm/instagram-mcp) |
+> | Access Threads API | Threads | [threads-mcp](https://github.com/thenavidm/threads-mcp) |
 >
 > Incompatible combinations grey out. If an option will not tick, it conflicts
 > with something already selected.
@@ -599,7 +599,7 @@ for spam. Deleting is possible but needs a separate switch.
 
 ## Questions
 
-Run into a problem or have a question? [Open an issue](https://github.com/navidmoazzez/facebook-mcp/issues) and I will help.
+Run into a problem or have a question? [Open an issue](https://github.com/thenavidm/facebook-mcp/issues) and I will help.
 
 ## About the author
 
