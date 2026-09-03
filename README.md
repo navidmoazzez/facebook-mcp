@@ -448,7 +448,7 @@ admin of any Page.
 **Anything else.** Run `doctor`. It checks each Page and reports the first
 broken link.
 
-Full setup walkthrough: [references/setup.md](references/setup.md).
+Full setup walkthrough: [INSTALL.md](INSTALL.md).
 
 ## FAQ ❓
 

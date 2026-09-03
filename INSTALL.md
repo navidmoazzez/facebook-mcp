@@ -1,4 +1,4 @@
-# Facebook MCP setup
+# Install
 
 Facebook has no app passwords and no personal access tokens. Every credential
 is issued through a Meta app you create yourself, and Page tokens are derived
